@@ -1,0 +1,13 @@
+{
+  "name": "js-calflow-01",
+  "version": "1.0.0",
+  "description": "Test app for JavaScript reachability (callflow) analysis; deliberately uses axios 1.6.0 and reaches its vulnerable methods",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "axios": "1.6.0"
+  }
+}
