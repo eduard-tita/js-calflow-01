@@ -28,7 +28,8 @@ pipeline {
               iqApplication: 'js-calflow-01',
               failBuildOnNetworkError: true,
               iqScanPatterns: [
-                  [scanPattern: 'package-lock.json']
+                  [scanPattern: 'package-lock.json'],
+                  [scanPattern: 'jars/*.jar']
               ],
               reachability: [
                   resultFile: 'reachability-result.json',
