@@ -40,13 +40,17 @@ pipeline {
                   ]
               ]
           )
-
-          archiveArtifacts(
-              artifacts: '**/reachability-result.json',
-              followSymlinks: false
-          )
         }
       }
+    }
+  }
+
+  post {
+    always {
+      archiveArtifacts(
+          artifacts: '**/reachability-result.json',
+          followSymlinks: false
+      )
     }
   }
 }
