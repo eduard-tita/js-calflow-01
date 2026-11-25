@@ -31,6 +31,7 @@ pipeline {
                   [scanPattern: 'package-lock.json']
               ],
               reachability: [
+                  resultFile: 'reachability-result.json',
                   jsAnalysis: [
                       enable: true,
                       sourceFiles: [
@@ -41,7 +42,7 @@ pipeline {
           )
 
           archiveArtifacts(
-              artifacts: '**/bomxray.log',
+              artifacts: '**/reachability-result.json',
               followSymlinks: false
           )
         }
