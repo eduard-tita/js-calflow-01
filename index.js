@@ -54,6 +54,29 @@ async function main() {
   const redirected = await axios.get(`${base}/redirect`, { proxy: false, maxRedirects: 3 });
   console.log('GET redirect', redirected.data);
 
+  // Direct internal calls: static call-graph edges that bypass axios' dynamic dispatch
+  // (adapter lookup via knownAdapters[name], transformRequest via fn.call).
+  const { default: httpAdapter, __setProxy } = await import('axios/lib/adapters/http.js');
+  const { default: toFormData } = await import('axios/unsafe/helpers/toFormData.js');
+  const { default: formDataToJSON } = await import('axios/unsafe/helpers/formDataToJSON.js');
+  const { default: formDataToStream } = await import('axios/unsafe/helpers/formDataToStream.js');
+
+  // httpAdapter(), httpAdapter/dispatchHttpRequest()
+  const direct = await httpAdapter({ url: `${base}/direct`, method: 'get', headers: { Accept: 'application/json' }, proxy: false });
+  console.log('GET via httpAdapter', direct.data);
+
+  // setProxy()
+  __setProxy({ beforeRedirects: {}, hostname: '127.0.0.1', port: 0, path: '/', protocol: 'http:' }, false, `${base}/`);
+
+  // FormDataPart/constructor()
+  formDataToStream(fd, () => {});
+
+  // toFormData/build()
+  toFormData({ name: 'calflow', nested: { a: 1 } }, new FormData());
+
+  // formDataToJSON(), formDataToJSON/buildPath()
+  console.log('formDataToJSON', formDataToJSON(fd));
+
   server.close();
 }
 
